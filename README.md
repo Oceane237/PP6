@@ -103,8 +103,38 @@ Place your completed `print.sh` in `solutions/` and commit. Then link it here:
 #### Reflection Questions
 
 1. **What is the difference between `printf` and `echo` in Bash?**
-2. **What is the role of `~/.bashrc` in your shell environment?**
-3. **Explain the difference between sourcing (`source ~/.bashrc`) and executing (`./print.sh`).**
+Use echo for simple printing; use printf when you need precise control over output format.
+
+3. **What is the role of `~/.bashrc` in your shell environment?**
+   ~/.bashrc is a shell script that runs every time you start a new interactive non-login Bash shell (like opening a new terminal window).
+
+It typically contains user-specific shell configuration, such as:
+
+Environment variables
+
+Aliases
+
+Functions
+
+Prompt customization (like PS1)
+
+Commands to run at shell start (welcome messages, etc.)
+5. **Explain the difference between sourcing (`source ~/.bashrc`) and executing (`./print.sh`).**
+Sourcing (source ~/.bashrc or . ~/.bashrc):
+
+Runs the script inside the current shell.
+
+Environment changes (variables, aliases, functions) persist in your current shell.
+
+Used to apply configuration files immediately without starting a new shell.
+
+Executing (./print.sh):
+
+Runs the script in a new, separate shell process.
+
+Environment changes inside the script do NOT affect the current shell.
+
+Used to run standalone scripts or programs.
 
 ---
 
@@ -160,8 +190,30 @@ _start:
 #### Reflection Questions
 
 1. **What is a file descriptor and how does the OS use it?**
-2. **How can you obtain or duplicate a file descriptor for another resource (e.g., a file or socket)?**
-3. **What might happen if you use an invalid file descriptor in a syscall?**
+  File Descriptor (FD) is a small, non-negative integer used by the OS to uniquely identify an open file or input/output resource (like files, pipes, sockets, terminals).
+
+When a program opens a file or socket, the OS returns a file descriptor to refer to that resource.
+
+The OS uses the file descriptor as an index into a per-process table that stores info about open files (file position, access mode, etc.).
+3. **How can you obtain or duplicate a file descriptor for another resource (e.g., a file or socket)?**
+You get a file descriptor by:
+
+Opening a file: using system calls like open().
+
+Creating a socket: using socket().
+
+To duplicate a file descriptor (e.g., redirect stdout), use:
+
+dup() or dup2() system calls, which create a copy of an existing FD with a new number
+4. **What might happen if you use an invalid file descriptor in a syscall?**
+The syscall will fail and typically return an error (e.g., -1).
+
+errno is set to indicate the error, often EBADF (Bad file descriptor).
+
+The operation won’t complete, so no data is read/written.
+
+Using invalid FDs can cause bugs or crashes if not handled properly.
+
 
 ---
 
@@ -201,7 +253,22 @@ int main(void) {
 
 1. **Use `objdump -d` on `print_c` to find the assembly instructions corresponding to your `printf` calls.**
 2. **Why is the syntax written differently from GAS assembly? Compare NASM vs. GAS notation.**
-3. **How could you use `fprintf` to write output both to `stdout` and to a file instead? Provide example code.**
+   The syntax you're seeing here is GAS-style (AT&T) because objdump uses AT&T syntax by default.
+
+Differences:
+
+Registers have a % prefix (e.g., %rdi)
+
+Source comes before destination in instructions
+
+Instructions often end in size suffixes (e.g., movq, addl, etc.)
+
+
+
+4. **How could you use `fprintf` to write output both to `stdout` and to a file instead? Provide example code.**
+The fprintf() function in C allows you to send formatted output to any file stream — not just stdout. You can use it to print to both the console and a file simultaneously.
+
+   
 
 ---
 
@@ -242,7 +309,25 @@ if __name__ == "__main__":
 #### Reflection Questions
 
 1. **Is Python’s print behavior closer to Bash, Assembly, or C? Explain.**
-2. **Can you inspect a Python script’s binary with `objdump`? Why or why not?**
+   Closest to: Bash
+
+Explanation:
+
+Python’s print() is high-level and automatically handles output formatting, like Bash’s echo or printf.
+
+Unlike C, you don’t have to manage format strings or manually handle newline characters (unless customizing).
+
+It's abstracted far away from Assembly-level details like registers and system calls.
+3. **Can you inspect a Python script’s binary with `objdump`? Why or why not?**
+No, you cannot inspect a Python script directly with objdump.
+
+Why?
+
+objdump is for compiled binaries (like ELF executables).
+
+Python scripts (.py) are interpreted text files, not compiled to machine code.
+
+If compiled with tools like pyinstaller or cython, then the resulting binary can be inspected with objdump.
 
 ---
 
