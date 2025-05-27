@@ -1,0 +1,6 @@
+*.o
+print
+print_c
+*~
+.DS_Store
+Thumbs.db
