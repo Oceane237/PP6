@@ -1,5 +1,6 @@
 # PP6
 
+
 ## Goal
 
 In this exercise you will:
@@ -96,45 +97,19 @@ print_escape
 **Solution Reference**
 Place your completed `print.sh` in `solutions/` and commit. Then link it here:
 
-```
-[print.sh](https://github.com/YOUR_USERNAME/REPO_NAME/blob/main/solutions/print.sh)
-```
 
+[print.sh] (https://github.com/Oceane237/PP6/blob/master/solutions/print.sh)
 #### Reflection Questions
 
 1. **What is the difference between `printf` and `echo` in Bash?**
-Use echo for simple printing; use printf when you need precise control over output format.
+<summary>echo is using for simple printing and printf is using for precise control over output format </summary>
 
-3. **What is the role of `~/.bashrc` in your shell environment?**
-   ~/.bashrc is a shell script that runs every time you start a new interactive non-login Bash shell (like opening a new terminal window).
+2. **What is the role of `~/.bashrc` in your shell environment?**
+  <summary> ~/.bashrc is a shell script that runs every time you start a new interactive non-login Bash shell as opening a new terminal window </summary>
 
-It typically contains user-specific shell configuration, such as:
-
-Environment variables
-
-Aliases
-
-Functions
-
-Prompt customization (like PS1)
-
-Commands to run at shell start (welcome messages, etc.)
-5. **Explain the difference between sourcing (`source ~/.bashrc`) and executing (`./print.sh`).**
-Sourcing (source ~/.bashrc or . ~/.bashrc):
-
-Runs the script inside the current shell.
-
-Environment changes (variables, aliases, functions) persist in your current shell.
-
-Used to apply configuration files immediately without starting a new shell.
-
-Executing (./print.sh):
-
-Runs the script in a new, separate shell process.
-
-Environment changes inside the script do NOT affect the current shell.
-
-Used to run standalone scripts or programs.
+3. **Explain the difference between sourcing (`source ~/.bashrc`) and executing (`./print.sh`).**
+<summary>Sourcing (`source ~/.bashrc`) runs script inside the current shell when executing (`./print.sh`) runs the script in a new ,separate shell process</summary>
+<summary>Sourcing (`source ~/.bashrc`) is used to apply configuration files immediately without starting a new shell when executing (`./print.sh`) is used to run standalone scripts or programs</summary>
 
 ---
 
@@ -149,6 +124,9 @@ Used to run standalone scripts or programs.
    * Any editor or OS-specific files
      Commit this `.gitignore` file.
      **Explain:** Why should compiled artifacts and binaries not be committed to a Git repository?
+  <summary> They are larger than the source code
+  wihth binaries, Git can not show meaningful diffs or merge changes but juat entire binary blobs.</summary>
+     
 2. In `./solutions/`, create a file named `print.s` using the template below.
 3. Define a message in the `.data` section (e.g., `msg: .ascii "Hello from GAS!\n"`, `len = . - msg`).
 4. In the `.text` section’s `_start` symbol, invoke `sys_write` (syscall 4) and then `sys_exit` (syscall 1) via `int $0x80`.
@@ -183,37 +161,26 @@ _start:
 
 **Solution Reference**
 
-```
-[print.s](https://github.com/YOUR_USERNAME/REPO_NAME/blob/main/solutions/print.s)
-```
+
+[print.s](https://github.com/Oceane237/PP6/blob/master/solutions/print.s)
+
 
 #### Reflection Questions
 
 1. **What is a file descriptor and how does the OS use it?**
-  File Descriptor (FD) is a small, non-negative integer used by the OS to uniquely identify an open file or input/output resource (like files, pipes, sockets, terminals).
+<summary> File descriptor is a small non-negative integer used by the OS to uniauely identify an open file or int/output resources.When a program opens a file the OS returns a file descriptor to refer to that ressource. The OS uses the file descriptor as an index into a per-process table that stores info about open files.</summary>
 
-When a program opens a file or socket, the OS returns a file descriptor to refer to that resource.
-
-The OS uses the file descriptor as an index into a per-process table that stores info about open files (file position, access mode, etc.).
-3. **How can you obtain or duplicate a file descriptor for another resource (e.g., a file or socket)?**
-You get a file descriptor by:
-
+2. **How can you obtain or duplicate a file descriptor for another resource (e.g., a file or socket)?**
+<summary> You can obtain a file descriptor by:
 Opening a file: using system calls like open().
+Creating a socket: using socket().</summary>
 
-Creating a socket: using socket().
+<summary>To duplicate a file descriptor (e.g., redirect stdout), use:
+dup() or dup2() system calls, which create a copy of an existing FD with a new number</summary>
 
-To duplicate a file descriptor (e.g., redirect stdout), use:
-
-dup() or dup2() system calls, which create a copy of an existing FD with a new number
-4. **What might happen if you use an invalid file descriptor in a syscall?**
-The syscall will fail and typically return an error (e.g., -1).
-
-errno is set to indicate the error, often EBADF (Bad file descriptor).
-
-The operation won’t complete, so no data is read/written.
-
-Using invalid FDs can cause bugs or crashes if not handled properly.
-
+3.  **What might happen if you use an invalid file descriptor in a syscall?**
+<summary>The syscall will fail and return an error .</summary>
+<summary>The operation won't complete so no data is read or written.</summary>
 
 ---
 
@@ -245,28 +212,20 @@ int main(void) {
 
 **Solution Reference**
 
-```
-[print.c](https://github.com/YOUR_USERNAME/REPO_NAME/blob/main/solutions/print.c)
-```
+[print.c] (https://github.com/Oceane237/PP6/blob/master/solutions/print.c)
+
 
 #### Reflection Questions
 
 1. **Use `objdump -d` on `print_c` to find the assembly instructions corresponding to your `printf` calls.**
 2. **Why is the syntax written differently from GAS assembly? Compare NASM vs. GAS notation.**
-   The syntax you're seeing here is GAS-style (AT&T) because objdump uses AT&T syntax by default.
-
-Differences:
-
-Registers have a % prefix (e.g., %rdi)
-
-Source comes before destination in instructions
-
-Instructions often end in size suffixes (e.g., movq, addl, etc.)
+  <summary> because objdjump uses AT&T syntax by default.
+   NASM is more intuitive for those familiar with Intel manuals and x86 instruction layout.
+   GAS is used by GCC and works seamlessly with the rest of the GNU toolchain.</summary>
 
 
-
-4. **How could you use `fprintf` to write output both to `stdout` and to a file instead? Provide example code.**
-The fprintf() function in C allows you to send formatted output to any file stream — not just stdout. You can use it to print to both the console and a file simultaneously.
+3. **How could you use `fprintf` to write output both to `stdout` and to a file instead? Provide example code.**
+<summary>The fprintf() function in C allows you to send formatted output to any file stream  not just  stdout.The fprintf() function in C allows you to send formatted output to any file stream — not just stdout. You can use it to print to both the console and a file simultaneously.</summary>
 
    
 
@@ -302,32 +261,19 @@ if __name__ == "__main__":
 
 **Solution Reference**
 
-```
-[print.py](https://github.com/YOUR_USERNAME/REPO_NAME/blob/main/solutions/print.py)
-```
+ 
+[print.py] (https://github.com/Oceane237/PP6/blob/master/solutions/print.py)
+ 
+
 
 #### Reflection Questions
 
 1. **Is Python’s print behavior closer to Bash, Assembly, or C? Explain.**
-   Closest to: Bash
+<summary>It is closer to Bash because Python’s print is high level and automatically handles output like Bash’s echo. Differently to C you don’t have to manage format strings or manually handle newline characters.Python’s print behavior is far awy from Assembly-level details like regiters and system calls.</summary>
 
-Explanation:
+2. **Can you inspect a Python script’s binary with `objdump`? Why or why not?**
+<summary>No you can’t because objdump is for compiled binaries. Python scripts are interpreted text files not compile to machine code.</summary>
 
-Python’s print() is high-level and automatically handles output formatting, like Bash’s echo or printf.
-
-Unlike C, you don’t have to manage format strings or manually handle newline characters (unless customizing).
-
-It's abstracted far away from Assembly-level details like registers and system calls.
-3. **Can you inspect a Python script’s binary with `objdump`? Why or why not?**
-No, you cannot inspect a Python script directly with objdump.
-
-Why?
-
-objdump is for compiled binaries (like ELF executables).
-
-Python scripts (.py) are interpreted text files, not compiled to machine code.
-
-If compiled with tools like pyinstaller or cython, then the resulting binary can be inspected with objdump.
 
 ---
 
